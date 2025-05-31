@@ -2,10 +2,13 @@ package utfpr.backend.controller;
 
 import utfpr.backend.model.User;
 import utfpr.backend.services.UserService;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -94,5 +97,24 @@ public class UserResource {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<User> login(@RequestBody Map<String, String> loginMap) {
+        String username = loginMap.get("username");
+        String password = loginMap.get("password");
+
+        if (username == null || password == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<User> usuarioOpt = userService.findByUsername(username);
+        if (usuarioOpt.isPresent()) {
+            User usuario = usuarioOpt.get();
+            if (usuario.getPassword().equals(password)) {
+                return ResponseEntity.ok(usuario);
+            }
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }
