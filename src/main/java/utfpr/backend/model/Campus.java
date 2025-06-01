@@ -6,14 +6,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_campus")
-public class Campus implements Serializable {
-	private static final long serialVersionUID = 1L;
+public class Campus {
 
 	@Id
     @GeneratedValue

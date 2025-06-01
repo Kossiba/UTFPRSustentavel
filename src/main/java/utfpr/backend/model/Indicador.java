@@ -11,7 +11,6 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
-import java.io.Serializable;
 import java.util.UUID;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,8 +20,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "indicador")
-public class Indicador implements Serializable  {
-	private static final long serialVersionUID = 1L;
+public class Indicador{
 
 	@Id
     @GeneratedValue

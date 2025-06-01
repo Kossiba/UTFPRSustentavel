@@ -14,6 +14,7 @@ import java.util.UUID;
  * Exponibiliza endpoints para listar, buscar por ID, criar, atualizar e deletar indicadores.
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/indicadores")
 public class IndicadorResource {
 
