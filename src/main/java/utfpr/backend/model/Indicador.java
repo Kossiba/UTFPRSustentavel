@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  * Entidade JPA para a tabela "indicador", com "quantidade" como Float.
  */
 @Entity
-@Table(name = "indicador")
+@Table(name = "tb_indicador")
 public class Indicador{
 
 	@Id

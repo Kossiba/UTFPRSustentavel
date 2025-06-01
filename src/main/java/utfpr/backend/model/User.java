@@ -7,13 +7,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "tb_users")
-public class User implements Serializable{
-	private static final long serialVersionUID = 1L;
+public class User{
+
 
 	@Id
     @GeneratedValue
