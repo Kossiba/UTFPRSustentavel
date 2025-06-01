@@ -12,6 +12,9 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 import java.util.UUID;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -35,6 +38,7 @@ public class Indicador{
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idCampus", nullable = false)
+    @JsonIgnore
     private Campus campus;
 
     @Column(name = "tipo", nullable = false, length = 50)
