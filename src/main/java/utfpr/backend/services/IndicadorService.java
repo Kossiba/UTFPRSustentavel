@@ -1,6 +1,7 @@
 package utfpr.backend.services;
 
 import utfpr.backend.model.Indicador;
+import utfpr.backend.dto.IndicadorCreateRequest;
 import utfpr.backend.model.Campus;
 import utfpr.backend.repository.IndicadorRepository;
 import utfpr.backend.repository.CampusRepository;
@@ -42,15 +43,27 @@ public class IndicadorService {
      * Caso seja necessário verificar existência do campus ou outros dados,
      * essa validação pode ser feita antes de salvar.
      */
-    public Indicador create(Indicador indicador) {
-        UUID campusId = indicador.getCampus().getIdCampus();
-        Campus campusExistente = campusRepository.findById(campusId)
-            .orElseThrow(() -> new IllegalArgumentException(
-                "Campus não encontrado com ID: " + campusId));
+    public Indicador createFromRequest(IndicadorCreateRequest req) {
+        // 1) Busca campus pelo UUID
+        Campus campusExistente = campusRepository
+                .findById(req.getIdCampus())
+                .orElseThrow(() -> new IllegalArgumentException(
+                    "Campus não encontrado com ID: " + req.getIdCampus()));
 
-        indicador.setCampus(campusExistente);
-        return indicadorRepository.save(indicador);
+        // 2) Monta a nova entidade
+        Indicador ind = new Indicador();
+        ind.setCampus(campusExistente);
+        ind.setTipo(req.getTipo());
+        ind.setDescricao(req.getDescricao());
+        ind.setQuantidade(req.getQuantidade());
+        ind.setMedida(req.getMedida());
+        ind.setDataInicial(req.getDataInicial());
+        ind.setDataFinal(req.getDataFinal());
+        // dataAtualizacao será setada no @PrePersist
+
+        return indicadorRepository.save(ind);
     }
+
 
     /**
      * Atualiza um indicador existente.
