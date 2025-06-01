@@ -44,13 +44,11 @@ public class IndicadorService {
      * essa validação pode ser feita antes de salvar.
      */
     public Indicador createFromRequest(IndicadorCreateRequest req) {
-        // 1) Busca campus pelo UUID
         Campus campusExistente = campusRepository
                 .findById(req.getIdCampus())
                 .orElseThrow(() -> new IllegalArgumentException(
                     "Campus não encontrado com ID: " + req.getIdCampus()));
 
-        // 2) Monta a nova entidade
         Indicador ind = new Indicador();
         ind.setCampus(campusExistente);
         ind.setTipo(req.getTipo());
