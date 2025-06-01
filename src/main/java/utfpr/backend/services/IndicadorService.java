@@ -1,8 +1,8 @@
 package utfpr.backend.services;
 
 import utfpr.backend.model.Indicador;
-import utfpr.backend.dto.IndicadorCreateRequest;
 import utfpr.backend.model.Campus;
+import utfpr.backend.dto.IndicadorCreateRequest;
 import utfpr.backend.repository.IndicadorRepository;
 import utfpr.backend.repository.CampusRepository;
 import org.springframework.stereotype.Service;
@@ -23,25 +23,35 @@ public class IndicadorService {
         this.campusRepository = campusRepository;
     }
 
-    /**
-     * Busca todos os indicadores.
-     */
+    /** Busca todos os indicadores. */
     public List<Indicador> findAll() {
         return indicadorRepository.findAll();
     }
 
-    /**
-     * Busca um indicador por ID.
-     */
+    /** Busca um indicador por ID. */
     public Optional<Indicador> findById(UUID id) {
         return indicadorRepository.findById(id);
     }
 
     /**
-     * Cria um novo indicador.
-     * 
-     * Caso seja necessário verificar existência do campus ou outros dados,
-     * essa validação pode ser feita antes de salvar.
+     * Retorna todos os Indicador de um campus específico.
+     * @param campusId UUID do campus para filtrar
+     * @return Lista de Indicador cujo campus.idCampus = campusId
+     * @throws IllegalArgumentException se o campusId não existir no BD
+     */
+    public List<Indicador> findByCampusId(UUID campusId) {
+        // (opcional) Primeiro checa se esse campus existe:
+        campusRepository.findById(campusId)
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Campus não encontrado com ID: " + campusId
+            ));
+
+        // Depois retorna todos os indicadores daquele campus:
+        return indicadorRepository.findByCampus_IdCampus(campusId);
+    }
+
+    /**
+     * Cria um novo Indicador a partir do DTO {@link IndicadorCreateRequest}.
      */
     public Indicador createFromRequest(IndicadorCreateRequest req) {
         Campus campusExistente = campusRepository
@@ -57,11 +67,10 @@ public class IndicadorService {
         ind.setMedida(req.getMedida());
         ind.setDataInicial(req.getDataInicial());
         ind.setDataFinal(req.getDataFinal());
-        // dataAtualizacao será setada no @PrePersist
+        // dataAtualizacao será setada no @PrePersist da entidade
 
         return indicadorRepository.save(ind);
     }
-
 
     /**
      * Atualiza um indicador existente.
@@ -89,6 +98,7 @@ public class IndicadorService {
             });
     }
 
+    /** Remove um indicador por ID. */
     public void delete(UUID id) {
         indicadorRepository.deleteById(id);
     }
